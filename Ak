@@ -1,0 +1,50 @@
+def gcd(a,b):
+    if 0 == b:
+        return a
+    return gcd(b,a%b)
+
+
+def Ex_Euclid(a,b):
+    if 0 == b:
+        x = 1;y = 0;q = a
+        return x,y,q
+    xyq = Ex_Euclid(b,a%b)
+    x = xyq[0];y = xyq[1];q = xyq[2]
+    temp = x;x = y;y = temp - a//b*y
+    return x,y,q
+
+
+def Is_Coprime(m_list):
+    for i in range(len(m_list)):
+        for j in range(i+1,len(m_list)):
+            if 1 != gcd(m_list[i],m_list[j]):
+                return 0
+    return 1
+
+
+n = int(input())
+a = []
+b = []
+c = []
+d = []
+s = 0;M = 1
+
+for i in range(0,n):
+    x = input().split()
+    a.append(int(x[0]))
+    b.append(int(x[1]))
+    
+if Is_Coprime(b) == 0:
+    print("Error")
+else:
+    for j in b:
+        M *= j
+    for j in b:
+        c.append(M/j)
+    for i in range(0,n):
+        d.append(Ex_Euclid(c[i],b[i])[0])
+    for j in range(0,n):
+        s = s + a[j] * d[j] *c[j]
+    while s < 0:
+        s += M
+    print("The answer is :",s,"mod",M)
